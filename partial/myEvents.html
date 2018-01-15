@@ -1,0 +1,34 @@
+<div id="content">
+	<h2>Meine Events<button type="button" class="btn btn-success create-button" ng-click="createEventClicked()">Neuer Event erfassen</button></h2>
+	<table class="content-table" ng-hide="loading">
+		<tr ng-repeat="event in myEvents">
+			<td>{{event.title}}</td>
+			<td>{{event.start}} - {{event.end}}</td>
+			<td>{{event.activityCount}} Aktivitäten - {{event.participantCount}} Teilnehmer </td>
+			<td class="button-td"><input type="image" src="img/show.png" ng-click="viewEventClicked(event)"/></td>
+			<td class="button-td"><input type="image" src="img/edit.png" ng-click="editEventClicked(event)"/></td>
+			<td class="button-td"><input type="image" src="img/del.png" ng-click="deleteEventClicked(event)"/></td>
+		</tr>
+	</table>
+	<div ng-hide="loading || myEvents.length">
+		<h3 style="text-align:center; margin-top: 20%; color: #475B80;">Sie haben zurzeit keine Events ...</h3>
+	</div>
+	<div ng-show="loading">
+		<h3 style="text-align:center; margin-top: 20%; color: #475B80;">Daten werden geladen ...</h3>
+		<div class="sk-circle">
+			<!-- http://tobiasahlin.com/spinkit/ -->
+		  <div class="sk-circle1 sk-child"></div>
+		  <div class="sk-circle2 sk-child"></div>
+		  <div class="sk-circle3 sk-child"></div>
+		  <div class="sk-circle4 sk-child"></div>
+		  <div class="sk-circle5 sk-child"></div>
+		  <div class="sk-circle6 sk-child"></div>
+		  <div class="sk-circle7 sk-child"></div>
+		  <div class="sk-circle8 sk-child"></div>
+		  <div class="sk-circle9 sk-child"></div>
+		  <div class="sk-circle10 sk-child"></div>
+		  <div class="sk-circle11 sk-child"></div>
+		  <div class="sk-circle12 sk-child"></div>
+		</div>
+	</div>
+</div>

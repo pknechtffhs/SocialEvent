@@ -1,0 +1,2085 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Die API für die Plattform zur Vermittlung zwischen Unternehmern/Veranstaltern und sozialen Gruppen/Einzelpersonen.",
+    "version": "1.0.0",
+    "title": "SocialEvent API",
+    "contact": {
+      "email": "pascal.knecht@students.ffhs.ch",
+      "name": "Pascal Knecht"
+    },
+    "license": {
+      "name": "The Unlicense",
+      "url": "http://unlicense.org"
+    }
+  },
+  "host": "socialevent.tk",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "user",
+      "description": "Benutzer-Aktionen"
+    },
+    {
+      "name": "session",
+      "description": "Session-Aktionen"
+    },
+    {
+      "name": "offer",
+      "description": "Dauerangebots-Aktionen"
+    },
+    {
+      "name": "event",
+      "description": "Event-Aktionen"
+    },
+    {
+      "name": "activity",
+      "description": "Aktivitäts-Aktionen"
+    },
+    {
+      "name": "participation",
+      "description": "Teilnahme-Aktionen"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Neuen Benutzer erstellen",
+        "description": "Aktion erstellt neuen Benutzer",
+        "operationId": "addUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "description": "Benutzerrolle",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nachname/Firmenname",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "mail",
+            "in": "query",
+            "description": "E-Mail-Adresse",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pw1",
+            "in": "query",
+            "description": "Gewünschtes Passwort",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "forename",
+            "in": "query",
+            "description": "Vorname (nötig, wenn role == 1)",
+            "type": "string"
+          },
+          {
+            "name": "picture",
+            "in": "query",
+            "description": "Base64-codiertes Profilbild (nötig, wenn role == 1)",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "description": "Profilbild (nötig, wenn role == 2)",
+            "type": "string"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "description": "Profilbild (nötig, wenn role == 2)",
+            "type": "string"
+          },
+          {
+            "name": "place",
+            "in": "query",
+            "description": "Profilbild (nötig, wenn role == 2)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Benutzer erstellt",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "API-Pfad zum neu erstellten Benutzer"
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "409": {
+            "description": "Benutzer mit dieser E-Mail-Adresse existiert bereits",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userid}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Informationen von Benutzer abfragen",
+        "description": "Aktion fragt Informationen über Benutzer ab",
+        "operationId": "getUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "Benutzername/E-Mail des Benutzers",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "profile": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig"
+          },
+          "404": {
+            "description": "Benutzer nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Informationen von Benutzer aktualisieren",
+        "description": "Aktion aktualisiert Informationen des Benutzers",
+        "operationId": "patchUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "Benutzername/E-Mail des Benutzers",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "oldpw",
+            "in": "query",
+            "description": "Altes Benutzerpasswort",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "newpw",
+            "in": "query",
+            "description": "Neues Benutzerpasswort",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "profilepicture",
+            "in": "query",
+            "description": "Neues Base64-codiertes Profilbild (nur falls role==1)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "companypictures",
+            "in": "query",
+            "description": "Base64-codiertes Array aus neuen Firmenbildern (nur falls role==2)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "companyinfo",
+            "in": "query",
+            "description": "Neue Firmeninfo/Werbetext (nur falls role==2)",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Änderung erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Keine Änderungen erkannt",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder Zugriff auf fremdes Konto unterbunden"
+          },
+          "403": {
+            "description": "Altes Passwort ungültig (nur bei Passwortänderung)",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "500": {
+            "description": "Interner Serverfehler",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Benutzer löschen",
+        "description": "Aktion löscht Benutzer",
+        "operationId": "deleteUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "Benutzername/E-Mail des Benutzers",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Benuter erfolgreich gelöscht",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder Zugriff auf fremdes Konto unterbunden"
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Neue Session erstellen (Login)",
+        "description": "Aktion erstellt neue Session",
+        "operationId": "addSession",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "E-Mail-Adresse/Benutzername des Benutzers",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Passwort des Benutzers",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Session erstellt",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "API-Pfad zur erstellten Session"
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "403": {
+            "description": "Anmeldedaten ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      }
+    },
+    "/sessions/{sessionid}": {
+      "get": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Informationen über die Sitzung abfragen",
+        "description": "Aktion fragt Informationen über Sitzung ab",
+        "operationId": "getSession",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionid",
+            "in": "path",
+            "description": "Sessionid der Sitzung",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "role": {
+                  "type": "integer",
+                  "description": "Rolle des angemeldeten Nutzers"
+                },
+                "mail": {
+                  "type": "string",
+                  "description": "E-Mail/User-ID des angemeldeten Nutzers"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "404": {
+            "description": "Session nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Session löschen (Logout)",
+        "description": "Aktion löscht Session",
+        "operationId": "deleteSession",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "sessionid",
+            "in": "path",
+            "description": "Sessionid der Sitzung",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session erfolgreich gelöscht",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "404": {
+            "description": "Session nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        }
+      }
+    },
+    "/offers": {
+      "post": {
+        "tags": [
+          "offer"
+        ],
+        "summary": "Neues Dauerangebot erstellen",
+        "description": "Aktion erstellt neues Dauerangebot",
+        "operationId": "addOffer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "Angebotstitel",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Angebotsbeschreibung",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "openinghours",
+            "in": "query",
+            "description": "Öffnungszeiten",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "offerpictures",
+            "in": "query",
+            "description": "Base64-codiertes Array aus Angebotsbildern (oder allenfalls leeres Array)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Angebot erstellt",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "API-Pfad zum neu erstellten Angebot"
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "500": {
+            "description": "Interner Serverfehler",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "offer"
+        ],
+        "summary": "Dauerangebote und deren Informationen abfragen",
+        "description": "Aktion fragt Dauerangebote und deren Informationen ab",
+        "operationId": "getOffers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "profile",
+            "in": "query",
+            "description": "Filter für E-Mail/UserID des Anbieter des Dauerangebots",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "offers": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Offer"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig"
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    },
+    "/offers/{offerid}": {
+      "get": {
+        "tags": [
+          "offer"
+        ],
+        "summary": "Informationen von Dauerangebot abfragen",
+        "description": "Aktion fragt Informationen über Dauerangebot ab",
+        "operationId": "getOffer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offerid",
+            "in": "path",
+            "description": "ID des Dauerangebots",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "offers": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Offer"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig"
+          },
+          "404": {
+            "description": "Dauerangebot nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "offer"
+        ],
+        "summary": "Dauerangebot aktualisieren",
+        "description": "Aktion aktualisiert Dauerangebot",
+        "operationId": "putOffer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offerid",
+            "in": "path",
+            "description": "ID des Dauerangebots",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "Angebotstitel",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Angebotsbeschreibung",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "openinghours",
+            "in": "query",
+            "description": "Öffnungszeiten",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "offerpictures",
+            "in": "query",
+            "description": "Base64-codiertes Array aus Angebotsbildern (oder allenfalls leeres Array)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Änderung erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "404": {
+            "description": "Kombination aus Dauerangebots-ID und bearbeitendem Nutzer (muss Anbieter sein) nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "offer"
+        ],
+        "summary": "Dauerangebot löschen",
+        "description": "Aktion löscht Dauerangebot",
+        "operationId": "deleteOffer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offerid",
+            "in": "path",
+            "description": "ID des Dauerangebots",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Löschen erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "404": {
+            "description": "Kombination aus Dauerangebots-ID und bearbeitendem Nutzer (muss Anbieter sein) nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    },
+    "/events": {
+      "post": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Neuer Event erstellen",
+        "description": "Aktion erstellt neuen Event",
+        "operationId": "addEvent",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "Event-Titel",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Event-Beschreibung",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Event-Start",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "Event-Ende",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eventpictures",
+            "in": "query",
+            "description": "Base64-codiertes Array aus Event-Bildern (oder allenfalls leeres Array)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Event erstellt",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "API-Pfad zum neu erstellten Event"
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "500": {
+            "description": "Interner Serverfehler",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Events und deren Informationen abfragen",
+        "description": "Aktion fragt Events und deren Informationen ab",
+        "operationId": "getEvents",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "profile",
+            "in": "query",
+            "description": "Filter für E-Mail/UserID des Anbieter des Events",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "events": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Event"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig"
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    },
+    "/events/{eventid}": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Informationen von Event abfragen",
+        "description": "Aktion fragt Informationen über Event ab",
+        "operationId": "getEvent",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "eventid",
+            "in": "path",
+            "description": "ID des Events",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "events": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Offer"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig"
+          },
+          "404": {
+            "description": "Event nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Event aktualisieren",
+        "description": "Aktion aktualisiert Event",
+        "operationId": "putEvent",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "eventid",
+            "in": "path",
+            "description": "ID des Events",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "Event-Titel",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Event-Beschreibung",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Event-Start",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "Event-Ende",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eventPictures",
+            "in": "query",
+            "description": "Base64-codiertes Array aus Event-Bildern (oder allenfalls leeres Array)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Änderung erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "404": {
+            "description": "Kombination aus Event-ID und bearbeitendem Nutzer (muss Anbieter sein) nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Event löschen",
+        "description": "Aktion löscht Event",
+        "operationId": "deleteEvent",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "eventid",
+            "in": "path",
+            "description": "ID des Events",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Löschen erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "404": {
+            "description": "Kombination aus Event-ID und bearbeitendem Nutzer (muss Anbieter sein) nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    },
+    "/activities": {
+      "post": {
+        "tags": [
+          "activity"
+        ],
+        "summary": "Neue Aktivität erstellen",
+        "description": "Aktion erstellt neue Aktivität",
+        "operationId": "addActivity",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "Aktivitäten-Titel",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Aktivitäten-Beschreibung",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Aktivitäten-Start",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "activityPictures",
+            "in": "query",
+            "description": "Base64-codiertes Array aus Aktivitäten-Bildern (oder allenfalls leeres Array)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "offerid",
+            "in": "query",
+            "description": "ID des verbundenen Dauerangebots",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventid",
+            "in": "query",
+            "description": "ID des verbundenen Events",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "description": "Strasse der Aktivität (nötig, wenn offerid == null && evenid == null)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "place",
+            "in": "query",
+            "description": "Ort der Aktivität (nötig, wenn offerid == null && evenid == null)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "venue",
+            "in": "query",
+            "description": "Treffpunkt der Aktivität (nötig, wenn offerid != null || evenid != null)",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Aktivität erstellt",
+            "headers": {
+              "Location": {
+                "type": "string",
+                "description": "API-Pfad zur neu erstellten Aktivität"
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "500": {
+            "description": "Interner Serverfehler",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "activity"
+        ],
+        "summary": "Aktivitäten und deren Informationen abfragen",
+        "description": "Aktion fragt Aktivitäten und deren Informationen ab",
+        "operationId": "getActivities",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offerid",
+            "in": "query",
+            "description": "Filter für Angebots-ID des verknüpften Dauerangebots der Aktivität",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "eventid",
+            "in": "query",
+            "description": "Filter für Event-ID des verknüpften Events der Aktivität",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "profile",
+            "in": "query",
+            "description": "Filter für E-Mail/UserID des Anbieter der Aktivität",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "activities": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Activity"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig"
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    },
+    "/activities/{activityid}": {
+      "get": {
+        "tags": [
+          "activity"
+        ],
+        "summary": "Informationen von Aktivität abfragen",
+        "description": "Aktion fragt Informationen über Aktivität ab",
+        "operationId": "getActivity",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "activityid",
+            "in": "path",
+            "description": "ID der Aktivität",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "activities": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Activity"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig"
+          },
+          "404": {
+            "description": "Event nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "activity"
+        ],
+        "summary": "Aktivität aktualisieren",
+        "description": "Aktion aktualisiert Aktivität",
+        "operationId": "putActivity",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "activityid",
+            "in": "path",
+            "description": "ID der Aktivität",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "titel",
+            "in": "query",
+            "description": "Aktivitäten-Titel",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Aktivitäten-Beschreibung",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Aktivitäten-Start",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "activityPictures",
+            "in": "query",
+            "description": "Base64-codiertes Array aus Aktivitäten-Bildern (oder allenfalls leeres Array)",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "description": "Strasse der Aktivität (nötig, wenn offerid == null && evenid == null)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "place",
+            "in": "query",
+            "description": "Ort der Aktivität (nötig, wenn offerid == null && evenid == null)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "venue",
+            "in": "query",
+            "description": "Treffpunkt der Aktivität (nötig, wenn offerid != null || evenid != null)",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Änderung erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "404": {
+            "description": "Kombination aus Aktivitäten-ID und bearbeitendem Nutzer (muss Anbieter sein) nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "activity"
+        ],
+        "summary": "Aktivität löschen",
+        "description": "Aktion löscht Aktivität",
+        "operationId": "deleteActivtiy",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "activityid",
+            "in": "path",
+            "description": "ID der Aktivität",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Löschen erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "404": {
+            "description": "Kombination aus Aktivitäten-ID und bearbeitendem Nutzer (muss Anbieter sein) nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    },
+    "/participations": {
+      "post": {
+        "tags": [
+          "participation"
+        ],
+        "summary": "Neue Teilnahme erstellen (anmelden)",
+        "description": "Aktion erstellt neue Teilnahme",
+        "operationId": "addParticipation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "activityid",
+            "in": "query",
+            "description": "Aktivitäten-ID für welche die Teilnahme erstellt werden soll",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Teilnahme erstellt"
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "500": {
+            "description": "Interner Serverfehler",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "participation"
+        ],
+        "summary": "Aktuelle Anmeldungen des Benutzers (entsprechend Sesionkey) abfragen",
+        "description": "Aktion fragt aktuelle Anmeldungen des Benutzers (entsprechend Sesionkey) ab",
+        "operationId": "getParticipations",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Anfrage erfolgreich",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                },
+                "activities": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Participation"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "participation"
+        ],
+        "summary": "Teilnahme von Aktivität löschen (abmelden)",
+        "description": "Aktion löscht Teilnahme",
+        "operationId": "deleteParticipation",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "activityid",
+            "in": "query",
+            "description": "Aktivitäten-ID für welche die Teilnahme erstellt werden soll",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Teilnahme erfolgreich gelöscht",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "enum": [
+                    "success"
+                  ],
+                  "description": "Status der Anfrage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Eingaben ungültig",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          },
+          "401": {
+            "description": "Session ungültig oder nicht für Aktion geeignet"
+          },
+          "404": {
+            "description": "Teilnahme nicht gefunden",
+            "schema": {
+              "$ref": "#/definitions/FailedAction"
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionkey": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "sessionkey": {
+      "type": "apiKey",
+      "name": "sessionkey",
+      "in": "query",
+      "description": "Session-Key generiert durch POST api/session"
+    }
+  },
+  "definitions": {
+    "FailedAction": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "failed"
+          ]
+        },
+        "errormessage": {
+          "type": "string",
+          "description": "Fehlermeldung"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "mail": {
+          "type": "string",
+          "description": "E-Mail-Adresse (userid) des Benutzers"
+        },
+        "role": {
+          "type": "integer",
+          "description": "Rolle des Benutzers"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name/Bezeichnung des Benutzers"
+        },
+        "forename": {
+          "type": "string",
+          "description": "Vorname des Benutzers (nur bei role == 1, ansonsten null)"
+        },
+        "profilepicture": {
+          "type": "string",
+          "description": "Base64-codiertes Profilbild des Benutzers (nur bei role == 1, ansonsten null)"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Telefonnummer des Benutzers (nur bei role == 2, ansonsten null)"
+        },
+        "street": {
+          "type": "string",
+          "description": "Strasse des Benutzers (nur bei role == 2, ansonsten null)"
+        },
+        "place": {
+          "type": "string",
+          "description": "Ort des Benutzers (nur bei role == 2, ansonsten null)"
+        },
+        "companyinfo": {
+          "type": "string",
+          "description": "Firmeninformationen/Werbetext des Benutzers (nur bei role == 2, ansonsten null)"
+        },
+        "companypictures": {
+          "type": "string",
+          "description": "Base64-Codiertes Array mit Unternehmensbildern des Benutzers (nur bei role == 2, ansonsten null)"
+        }
+      }
+    },
+    "Offer": {
+      "type": "object",
+      "properties": {
+        "offerid": {
+          "type": "integer",
+          "description": "ID des Dauerangebots"
+        },
+        "title": {
+          "type": "string",
+          "description": "Titel des Dauerangebots"
+        },
+        "description": {
+          "type": "string",
+          "description": "Beschreibung des Dauerangebots"
+        },
+        "pictures": {
+          "type": "string",
+          "description": "Bilder des Dauerangebots (als Base64-codiertes Array)"
+        },
+        "openinghours": {
+          "type": "string",
+          "description": "Öffnungszeiten des Dauerangebots"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name des Anbieter des Dauerangebots"
+        },
+        "street": {
+          "type": "string",
+          "description": "Strasse des Anbieter des Dauerangebots"
+        },
+        "place": {
+          "type": "string",
+          "description": "Ort des Anbieter des Dauerangebots"
+        },
+        "provider": {
+          "type": "string",
+          "description": "E-Mail/UserID des Anbieter des Dauerangebots"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Telefonnummer des Anbieter des Dauerangebots"
+        },
+        "participantCount": {
+          "type": "integer",
+          "description": "Anzahl von Teilnehmern an offenen, mit Dauerangebot verbundenen Aktivitäten"
+        },
+        "activityCount": {
+          "type": "integer",
+          "description": "Anzahl an offenen, mit Dauerangebot verbundenen Aktivitäten"
+        }
+      }
+    },
+    "Event": {
+      "type": "object",
+      "properties": {
+        "eventid": {
+          "type": "integer",
+          "description": "ID des Events"
+        },
+        "title": {
+          "type": "string",
+          "description": "Titel des Events"
+        },
+        "description": {
+          "type": "string",
+          "description": "Beschreibung des Events"
+        },
+        "pictures": {
+          "type": "string",
+          "description": "Bilder des Events (als Base64-codiertes Array)"
+        },
+        "start": {
+          "type": "string",
+          "description": "Start des Events"
+        },
+        "end": {
+          "type": "string",
+          "description": "Ende des Events"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name des Anbieter des Events"
+        },
+        "street": {
+          "type": "string",
+          "description": "Strasse des Anbieter des Events"
+        },
+        "place": {
+          "type": "string",
+          "description": "Ort des Anbieter des Events"
+        },
+        "provider": {
+          "type": "string",
+          "description": "E-Mail/UserID des Anbieter des Events"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Telefonnummer des Anbieter des Events"
+        },
+        "participantCount": {
+          "type": "integer",
+          "description": "Anzahl von Teilnehmern an offenen, mit Event verbundenen Aktivitäten"
+        },
+        "activityCount": {
+          "type": "integer",
+          "description": "Anzahl an offenen, mit Event verbundenen Aktivitäten"
+        }
+      }
+    },
+    "Activity": {
+      "type": "object",
+      "properties": {
+        "activityid": {
+          "type": "integer",
+          "description": "ID der Aktivität"
+        },
+        "offerid": {
+          "type": "integer",
+          "description": "ID des verknüpften Dauerangebots"
+        },
+        "eventid": {
+          "type": "integer",
+          "description": "ID des verknüpften Events"
+        },
+        "title": {
+          "type": "string",
+          "description": "Titel der Aktivität"
+        },
+        "description": {
+          "type": "string",
+          "description": "Beschreibung der Aktivität"
+        },
+        "pictures": {
+          "type": "string",
+          "description": "Bilder der Aktivität (als Base64-codiertes Array)"
+        },
+        "start": {
+          "type": "string",
+          "description": "Start der Aktivität"
+        },
+        "venue": {
+          "type": "string",
+          "description": "Treffpunkt der Aktivität (wenn offerid != null || evenid != null)"
+        },
+        "street": {
+          "type": "string",
+          "description": "Strasse der Aktivität (wenn offerid == null && evenid == null)"
+        },
+        "place": {
+          "type": "string",
+          "description": "Ort der Aktivität (wenn offerid == null && evenid == null)"
+        },
+        "provider": {
+          "type": "string",
+          "description": "E-Mail/UserID des Anbieter des Events"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nachname des Anbieter der Aktivität"
+        },
+        "forename": {
+          "type": "string",
+          "description": "Vorname des Anbieter der Aktivität"
+        },
+        "profilepicture": {
+          "type": "string",
+          "description": "Base64-codiertes Profilbild des Anbieter der Aktivität"
+        },
+        "participantCount": {
+          "type": "integer",
+          "description": "Anzahl von Teilnehmern der Aktivität"
+        },
+        "participants": {
+          "type": "array",
+          "description": "Teilnehmer der Aktivität",
+          "items": {
+            "type": "object",
+            "properties": {
+              "forename": {
+                "type": "string",
+                "description": "Vorname des Teilnehmers"
+              },
+              "profilepicture": {
+                "type": "string",
+                "description": "Base64-codiertes Profilbild des Teilnehmers der Aktivität"
+              }
+            }
+          }
+        },
+        "participated": {
+          "type": "boolean",
+          "description": "Zeigt an, ob der Abfrangende (entsprechend Sessionkey) derzeit an Aktivität teilnimmt"
+        }
+      }
+    },
+    "Participation": {
+      "type": "object",
+      "properties": {
+        "activityid": {
+          "type": "integer",
+          "description": "ID der Aktivität an welcher teilgenommen wird"
+        },
+        "title": {
+          "type": "integer",
+          "description": "Titel der Aktivität an welcher teilgenommen wird"
+        },
+        "start": {
+          "type": "integer",
+          "description": "Startzeitpunkt der Aktivität an welcher teilgenommen wird"
+        }
+      }
+    }
+  }
+}

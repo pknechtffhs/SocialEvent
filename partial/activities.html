@@ -1,0 +1,91 @@
+<div id="content">
+	<h1>Aktivit&auml;ten <span ng-show="filtered">(gefiltert)</span></h1>
+	<div style="text-align:center">
+		<div class="embeddedWidget" ng-repeat="activity in activities" ng-show="activities.length">
+			<div class="pictureArea" style="width:30%">
+				<div id="carousel{{activity.activityid}}" class="carousel slide" style="height: 100%">
+					<ol class="carousel-indicators" style="z-index:5" ng-show="activity.activityPictures.length > 1">
+					  <li data-target="#carousel{{activity.activityid}}" ng-repeat="img in activity.activityPictures" data-slide-to="{{$index}}" ng-class="{active: $first}" ></li>
+					</ol>
+					<div class="carousel-inner" style="height: 100%; width: 100%">
+					  <div ng-repeat="img in activity.activityPictures"  ng-class="{active: $first}" class="item" style="height: 100%; width: 100%">
+						<img src="{{img}}" class="carouselImage">
+					  </div>
+					</div>
+					<a class="left carousel-control" href="#carousel{{activity.activityid}}" data-slide="prev" target="_self" ng-show="activity.activityPictures.length > 1">
+					  <span class="glyphicon glyphicon-chevron-left"></span>
+					</a>
+					<a class="right carousel-control" href="#carousel{{activity.activityid}}" data-slide="next" target="_self" ng-show="activity.activityPictures.length > 1">
+					  <span class="glyphicon glyphicon-chevron-right"></span>
+					</a>
+			  </div>
+			</div>
+			<div class="contentArea" style="width:70%;">
+				<div style="height:295px;overflow-y: auto;">
+					<span style="font-size:larger;"><strong>{{activity.title}}</strong></span>
+					<div ng-bind-html="activity.description|nl2br"></div>
+					<p style="margin-top:15px; margin-bottom: 0px" ng-show="activity.eventid">
+						<i>Verkn&uuml;pfter Event:</i><br>
+						<strong>{{activity.event.title}} ({{activity.event.start}})</strong><br>
+						Veranstalter: {{activity.event.name}} ({{activity.event.place}})
+					</p>
+					<p style="margin-top:15px; margin-bottom: 0px" ng-show="activity.offerid">
+						<i>Verkn&uuml;pftes Dauerangebot:</i><br>
+						<strong>{{activity.offer.title}} ({{activity.offer.name}})</strong><br>
+						Anbieter: {{activity.offer.name}} ({{activity.offer.place}})
+					</p> 
+					<p style="margin-top:15px; margin-bottom: 0px" ng-show="activity.eventid||activity.offerid">
+						<i>Treffpunkt &amp; Start der Aktivit&auml;t:</i><br>
+						{{activity.venue}} ({{activity.start}})
+					</p> 
+					<p style="margin-top:15px; margin-bottom: 0px" ng-hide="activity.eventid||activity.offerid">
+						<i>Treffpunkt &amp; Start der Aktivit&auml;t:</i><br>
+						{{activity.place}} ({{activity.start}})
+					</p>
+					<p style="margin-top:15px; margin-bottom: 0px">
+						<i>Organisator:</i>
+						<table>
+							<tr>
+								<td rowspan="2"><img ng-src="{{activity.profilepicture}}" class="smallProfilePicture"></td>
+								<td><strong>{{activity.forename}} {{activity.name}}</strong>
+							</tr>
+							<tr>
+								<td><a href="mailto:{{activity.provider}}">{{activity.provider}}</a></td>
+							</tr>
+						</table>		
+					</p>
+				</div>
+				<div style="text-align:center; margin: 0 -5px;">
+					<button id="details" type="button" class="btn btn-primary" ng-click="showActivityClicked(activity)">Details</button>
+					<button id="edit" type="button" class="btn btn-primary" ng-click="editActivityClicked(activity)" ng-show="activity.provider == name">Bearbeiten</button>
+					<button id="delete" type="button" class="btn btn-primary btn-danger" ng-click="deleteActivityClicked(activity)" ng-show="activity.provider == name">L&ouml;schen</button>
+					<button id="vO" type="button" class="btn btn-primary" ng-click="viewOfferClicked(activity)" ng-show="activity.provider != name && activity.offerid">Verkn. Angebot</button>
+					<button id="vE" type="button" class="btn btn-primary" ng-click="viewEventClicked(activity)" ng-show="activity.provider != name && activity.eventid">Verkn. Event </button>
+					<button id="join" type="button" class="btn btn-primary btn-success" ng-click="joinActivityClicked(activity)" ng-show="activity.provider != name && role == 1 && !activity.participated">Teilnehmen</button>
+					<button id="leave" type="button" class="btn btn-primary btn-danger" ng-click="leaveActivityClicked(activity)" ng-show="activity.provider != name && role == 1 && activity.participated">Abmelden</button>
+				</div>
+			</div>
+		</div>
+	<div ng-hide="loading ||activities.length">
+		<h3 style="text-align:center; margin-top: 20%; color: #475B80;">Keine Aktivit&auml;ten gefunden ...</h3>
+	</div>
+	<div ng-show="loading">
+		<h3 style="text-align:center; margin-top: 20%; color: #475B80;">Daten werden geladen ...</h3>
+		<div class="sk-circle">
+			<!-- http://tobiasahlin.com/spinkit/ -->
+		  <div class="sk-circle1 sk-child"></div>
+		  <div class="sk-circle2 sk-child"></div>
+		  <div class="sk-circle3 sk-child"></div>
+		  <div class="sk-circle4 sk-child"></div>
+		  <div class="sk-circle5 sk-child"></div>
+		  <div class="sk-circle6 sk-child"></div>
+		  <div class="sk-circle7 sk-child"></div>
+		  <div class="sk-circle8 sk-child"></div>
+		  <div class="sk-circle9 sk-child"></div>
+		  <div class="sk-circle10 sk-child"></div>
+		  <div class="sk-circle11 sk-child"></div>
+		  <div class="sk-circle12 sk-child"></div>
+		</div>
+	</div>
+	</div>
+</div>

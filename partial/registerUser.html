@@ -1,0 +1,38 @@
+<h2>Als Teilnehmer registrieren</h2>
+<div id="dialogform" ng-controller="registerController">
+	<table>
+		<tr>
+			<td><label for="name">Nachname</label></td>
+			<td><input type="text" class="form-control" id="name" placeholder="Name eingeben..." ng-model="registerdata.name"></td>
+		</tr>
+		<tr>
+			<td><label for="forename">Vorname</label></td>
+			<td><input type="text" class="form-control" id="forename" placeholder="Vorname eingeben..." ng-model="registerdata.forename"></td>
+		</tr>
+		<tr>
+			<td><label for="mail">Mail-Adresse</label></td>
+			<td><input type="text" class="form-control" id="mail" placeholder="Mail-Adresse eingeben..." ng-model="registerdata.mail"></td>
+		</tr>
+		<tr>
+			<td><label for="pw1">Passwort</label></td>
+			<td><input type="password" class="form-control" id="pw1" placeholder="Passwort eingeben..." ng-model="registerdata.pw1"></td>
+		</tr>
+		<tr>
+			<td><label for="pw2">Passwort (Wdh.)</label></td>
+			<td><input type="password" class="form-control" id="pw2" placeholder="Passwort (Wiederholung) eingeben..." ng-model="registerdata.pw2"></td>
+		</tr>
+		<tr>
+			<td>Profilbild</td>
+			<td>
+				<div class="btn-group">
+					<label class="btn btn-default btn-file">Durchsuchen<input type="file" style="display: none;" id="file" name="file" custom-on-change="onPictureUpdate"></label>
+					<a class="btn btn-default" ng-click="deleteClicked()">Entfernen</a>
+				</div>
+				<img ng-src="{{profilePicture}}" class="profilePicture" />
+			</td>
+		</tr>
+	</table>
+	<button id="login" type="button" class="btn btn-link" ng-click="loginClicked()">Schon registriert?</button>
+	<button id="abort" type="button" class="btn btn-primary" ng-click="abortClicked()">Abbrechen</button>
+	<button id="register" type="submit" class="btn btn-primary" ng-click="registerClicked()">Registrieren</button>
+</div>

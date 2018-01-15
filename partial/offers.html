@@ -1,0 +1,72 @@
+<div id="content">
+	<h1>Dauerangebote</h1>
+	<div style="text-align:center">
+		<div class="embeddedWidget" ng-repeat="offer in offers" ng-show="offers.length">
+			<div class="pictureArea" style="width:30%">
+				<div id="carousel{{offer.offerid}}" class="carousel slide" style="height: 100%">
+					<ol class="carousel-indicators" style="z-index:5" ng-show="offer.offerPictures.length > 1">
+					  <li data-target="#carousel{{offer.offerid}}" ng-repeat="img in offer.offerPictures" data-slide-to="{{$index}}" ng-class="{active: $first}" ></li>
+					</ol>
+					<div class="carousel-inner" style="height: 100%; width: 100%">
+					  <div ng-repeat="img in offer.offerPictures"  ng-class="{active: $first}" class="item" style="height: 100%; width: 100%">
+						<img src="{{img}}" class="carouselImage">
+					  </div>
+					</div>
+					<a class="left carousel-control" href="#carousel{{offer.offerid}}" data-slide="prev" target="_self" ng-show="offer.offerPictures.length > 1">
+					  <span class="glyphicon glyphicon-chevron-left"></span>
+					</a>
+					<a class="right carousel-control" href="#carousel{{offer.offerid}}" data-slide="next" target="_self" ng-show="offer.offerPictures.length > 1">
+					  <span class="glyphicon glyphicon-chevron-right"></span>
+					</a>
+			  </div>
+			</div>
+			<div class="contentArea" style="width:70%;">
+				<div style="height:295px;overflow-y: auto;">
+					<span style="font-size:larger;"><strong>{{offer.title}}</strong></span>
+					<div ng-bind-html="offer.description|nl2br"></div>
+					<p style="margin-top:15px">
+						<i>&Ouml;ffnungszeiten:</i><br />
+						<div ng-bind-html="offer.openinghours|nl2br" style="margin-top: -10px;"></div>
+					</p>
+					<p style="margin-top:15px">
+						<strong>{{offer.name}}</strong><br />
+						{{offer.place}}<br />				
+					</p>
+					<p style="margin-top:15px">
+						<strong>{{offer.activityCount}} Aktivit&auml;t(en) mit {{offer.participantCount}} Teilnehmer(n) geplant</strong>
+					</p>
+				</div>
+				<div style="text-align:center; margin: 0 -5px;">
+					<button id="abort" type="button" class="btn btn-primary" ng-click="showOfferClicked(offer)">Details</button>
+					<button id="edit" type="button" class="btn btn-primary" ng-click="editOfferClicked(offer)" ng-show="offer.provider == name">Bearbeiten</button>
+					<button id="shAkt" type="button" class="btn btn-primary" ng-click="showActivitiesClicked(offer)" ng-show="role==2">Akt. anzeigen</button>
+					<div class="btn-group" role="group" ng-show="role == 1">
+						<button id="shAkt" type="button" class="btn btn-primary" ng-click="showActivitiesClicked(offer)">Akt. anzeigen</button>
+						<button id="create" type="button" class="btn btn-primary btn-success" ng-click="createActivityClicked(offer)">Akt. erstellen</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	<div ng-hide="loading || offers.length">
+		<h3 style="text-align:center; margin-top: 20%; color: #475B80;">Zurzeit keine Dauerangebote verf&uuml;gbar ...</h3>
+	</div>
+	<div ng-show="loading">
+		<h3 style="text-align:center; margin-top: 20%; color: #475B80;">Daten werden geladen ...</h3>
+		<div class="sk-circle">
+			<!-- http://tobiasahlin.com/spinkit/ -->
+		  <div class="sk-circle1 sk-child"></div>
+		  <div class="sk-circle2 sk-child"></div>
+		  <div class="sk-circle3 sk-child"></div>
+		  <div class="sk-circle4 sk-child"></div>
+		  <div class="sk-circle5 sk-child"></div>
+		  <div class="sk-circle6 sk-child"></div>
+		  <div class="sk-circle7 sk-child"></div>
+		  <div class="sk-circle8 sk-child"></div>
+		  <div class="sk-circle9 sk-child"></div>
+		  <div class="sk-circle10 sk-child"></div>
+		  <div class="sk-circle11 sk-child"></div>
+		  <div class="sk-circle12 sk-child"></div>
+		</div>
+	</div>
+	</div>
+</div>

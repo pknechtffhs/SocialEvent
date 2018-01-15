@@ -1,0 +1,57 @@
+<div id="dialogform" ng-controller="modifyEventController">
+	<h4 ng-show="actionType == 'create'">Event erstellen</h4>
+	<h4 ng-show="actionType == 'edit'">Event &auml;ndern</h4>
+	<table id="modifyTable">
+		<tr>
+			<td><label for="title">Titel</label></td>
+			<td><input type="text" class="form-control" id="title" placeholder="Titel eingeben..." ng-model="modifyEvent.title" ng-change="changed=true"></td>
+		</tr>
+		<tr>
+			<td><label for="start">Event-Start</label></td>
+			<td>
+			    <div class='input-group date' id='datepicker_start'>
+					<input type="text" class="form-control" id="start" placeholder="Start auswählen..." ng-model="modifyEvent.start_real" ng-change="changed=true" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td><label for="end">Event-Ende</label></td>
+			<td>
+			    <div class='input-group date' id='datepicker_end'>
+					<input type="text" class="form-control" id="end" placeholder="Ende auswählen..." ng-model="modifyEvent.end_real" ng-change="changed=true" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td><label for="description">Beschreibung</label></td>
+			<td><textarea rows="4" id="description" cols="45" placeholder="Beschreibung eingeben..." class="form-control" style="resize: none;" ng-model="modifyEvent.description" ng-change="changed=true"></textarea></td>
+		</tr>
+
+	</table>
+	<hr style="margin: 15px;">
+	<table>
+		<tr>
+			<td style="height: 70px;">
+				<label class="btn btn-default btn-file">Hinzuf&uuml;gen<input type="file" style="display: none;" id="file" name="file" custom-on-change="onPictureUpdate"></label>
+			</td>
+			<td ng-repeat="img in eventPictures" ng-show="eventPictures.length">
+				<div class="buttoned-image"> 
+					<img ng-src="{{img}}" class="companyPictureSmall">
+					<input type="image" src="img/del.png" ng-click="deleteClicked(img)"/>
+				</div>
+			</td>
+			<td ng-hide="eventPictures.length">
+				Keine Bilder vorhanden!
+			</td>
+		</tr>
+	</table>
+	<button id="abort" type="button" class="btn btn-primary" ng-click="abortClicked()">Abbrechen</button>
+	<button id="create" type="button" class="btn btn-primary" ng-click="createClicked()" ng-show="actionType == 'create'">Erstellen</button>
+	<button id="edit" type="button" class="btn btn-primary" ng-click="editClicked()" ng-show="actionType == 'edit'">&Auml;ndern</button>
+</div>

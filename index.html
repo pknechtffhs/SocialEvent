@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>SocialEvent - Soziale Events f&uuml;r Dich!</title>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" integrity="sha256-yMjaV542P+q1RnH6XByCPDfUFhmOafWbeLPmqKh11zo=" crossorigin="anonymous" />
+		<link rel="stylesheet" href="css/socialevent.css">
+		<link rel="stylesheet" href="css/spinner.css">
+	</head>
+	
+	<body ng-app="socialEventApp" >
+		<div ng-controller="overlayController">
+			<div class="dimmer dialogDimmer" ng-show="dialogInclude"></div>
+			<div class="widget dialogWidget" ng-show="dialogInclude">
+				<form>
+					<div class="dialogContent" ng-include="dialogInclude"></div>
+				</form>
+			</div>
+		
+		
+			<div class="dimmer messageDimmer" ng-show="displayedMessage" ng-click="closeMessage()"></div>
+			<div class="widget infoWidget" ng-class="{ 'errorWidget': displayErrorMessage, 'okWidget': !displayErrorMessage }" ng-show="displayedMessage" ng-click="closeMessage()">
+				<table style="width:100%;height:100%">
+					<tr>
+						<td class="iconCell"><img ng-src="{{displayErrorMessage && 'img/error.png' || 'img/ok.png'}}" alt="Meldungsicon"></td>
+						<td class="messageCell"><p>{{displayedMessage}}</p></td>
+					</tr>
+				</table>
+			</div>
+			
+		</div>
+		<nav class="navbar navbar-default" id="titlebar" ng-controller="titlebarController">
+			<div class="container-fluid">
+				<div class="navbar-form navbar-left" >
+					<h4 style="font-size:20px; margin-left:-20px; color: white"> SocialEvent - Soziale Events f&uuml;r Dich! </h4> 
+				</div>
+				<div class="navbar-form navbar-right" >
+					<button type="button" class="btn btn-primary" ng-click="settingsClicked()" ng-show="loggedIn">Einstellungen</button>
+					<button type="button" class="btn btn-primary" ng-click="logoutClicked()" ng-show="loggedIn">Logout</button>
+					<button type="button" class="btn btn-primary" ng-click="loginClicked()" ng-show="!loggedIn">Login</button>
+				</div>
+			</div>
+		</nav>
+		<div id="sidebar" ng-show="loggedIn" >
+			<a class="sidebar-button" href="#!/offers">Dauerangebote</a>
+			<a class="sidebar-button" href="#!/events">Events</a>
+			<a class="sidebar-button" href="#!/activities">Aktivit&auml;ten</a> 
+			<a class="sidebar-button" ng-show="role==2" href="#!/myoffers">Meine Dauerangebote</a> 
+			<a class="sidebar-button" ng-show="role==2" href="#!/myevents" style="border-bottom: none">Meine Events</a>
+			<a class="sidebar-button" ng-show="role==1" href="#!/myactivities">Meine Aktivitäten</a>  
+			<a class="sidebar-button" ng-show="role==1" href="#!/myparticipations">Meine Teilnahmen</a> 
+		</div>
+		
+		<div id="bgholder"></div>
+		
+		<div class="container-fluid vertical-center text-center" ng-view>	
+		</div>
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js" integrity="sha384-hOYZLmROZQbcYRe8tUP/9bcPGwwDxXf81Rnld8ETuGcGM45lysORQcHwyEFlYlaO" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-route.min.js" integrity="sha384-W3m3W4hI4YtZnxvmc9GtTeIhlUuL8o3YArFbMB1RM2dyq01PaL1dwEM/q4q/TJZB" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-cookies.min.js" integrity="sha384-zoGJ6ldirItV+3dBoFKCK7PIIjTKNBrhc9ersyF8+8tm5v3w9JXE3mXQH3f+uJXw" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/de-ch.js" integrity="sha256-5+ihJYpi09NWPdQ183og6g+5JoQEH3i4V+ZVwI8NvTQ=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
+		<script src="js/socialevent.js"></script>
+		<script src="js/image-compressor.min.js"></script>
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<div id="dialogform" style="padding: 0px;" ng-controller="settingsController">
+	<h4>Passwort &auml;ndern</h4>
+	<table>
+		<tr>
+			<td><label for="oldpw">Altes Passwort:</label></td>
+			<td><input type="password" class="form-control" id="oldpw" placeholder="Altes Passwort eingeben..." ng-model="changepw.oldpw"></td>
+		</tr>
+		<tr>
+			<td><label for="pw1">Neues Passwort</label></td>
+			<td><input type="password" class="form-control" id="pw1" placeholder="Neues Passwort eingeben..." ng-model="changepw.pw1"></td>
+		</tr>
+		<tr>
+			<td><label for="pw2">Neues Passwort (Wdh.)</label></td>
+			<td><input type="password" class="form-control" id="pw2" placeholder="Neues Passwort (Wiederholung) eingeben..." ng-model="changepw.pw2"></td>
+		</tr>
+	</table>
+	<hr class="small-hr">
+	<h4>Werbetext &auml;ndern</h4>
+	<textarea rows="2" cols="50" class="form-control" style="resize: none;" ng-model="companyinfo"></textarea>
+	<hr class="small-hr">
+	<h4>Unternehmensbilder &auml;ndern</h4>
+	<table>
+		<tr>
+			<td style="height: 70px;">
+				<label class="btn btn-default btn-file">Hinzuf&uuml;gen<input type="file" style="display: none;" id="file" name="file" custom-on-change="onPictureUpdate"></label>
+			</td>
+			<td ng-repeat="img in companyPictures" ng-show="companyPictures.length">
+				<div class="buttoned-image"> 
+					<img ng-src="{{img}}" class="companyPictureSmall">
+					<input type="image" src="img/del.png" ng-click="deleteClicked(img)"/>
+				</div>
+			</td>
+			<td ng-hide="companyPictures.length">
+				Keine Bilder vorhanden!
+			</td>
+		</tr>
+	</table>
+	<button id="abort" type="button" class="btn btn-primary" ng-click="abortClicked()">Abbrechen</button>
+	<button id="save" type="submit" class="btn btn-primary" ng-click="saveClicked()">Speichern</button>
+</div>

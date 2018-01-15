@@ -1,0 +1,38 @@
+<div id="dialogform" ng-controller="modifyOfferController">
+	<h4 ng-show="actionType == 'create'">Dauerangebot erstellen</h4>
+	<h4 ng-show="actionType == 'edit'">Dauerangebot &auml;ndern</h4>
+	<table id="modifyTable">
+		<tr>
+			<td><label for="title">Titel</label></td>
+			<td><input type="text" class="form-control" id="title" placeholder="Titel eingeben..." ng-model="modifyOffer.title" ng-change="changed=true"></td>
+		</tr>
+		<tr>
+			<td><label for="description">Beschreibung</label></td>
+			<td><textarea rows="4" id="description" cols="45" placeholder="Beschreibung eingeben..." class="form-control" style="resize: none;" ng-model="modifyOffer.description" ng-change="changed=true"></textarea></td>
+		</tr>
+		<tr>
+			<td><label for="openinghours">&Ouml;ffnungszeiten</label></td>
+			<td><textarea rows="2" id="openinghours" cols="45" placeholder="&Ouml;ffnungszeiten eingeben..." class="form-control" style="resize: none;" ng-model="modifyOffer.openinghours" ng-change="changed=true"></textarea></td>
+		</tr>
+	</table>
+	<hr style="margin: 15px;">
+	<table>
+		<tr>
+			<td style="height: 70px;">
+				<label class="btn btn-default btn-file">Hinzuf&uuml;gen<input type="file" style="display: none;" id="file" name="file" custom-on-change="onPictureUpdate"></label>
+			</td>
+			<td ng-repeat="img in offerPictures" ng-show="offerPictures.length">
+				<div class="buttoned-image"> 
+					<img ng-src="{{img}}" class="companyPictureSmall">
+					<input type="image" src="img/del.png" ng-click="deleteClicked(img)"/>
+				</div>
+			</td>
+			<td ng-hide="offerPictures.length">
+				Keine Bilder vorhanden!
+			</td>
+		</tr>
+	</table>
+	<button id="abort" type="button" class="btn btn-primary" ng-click="abortClicked()">Abbrechen</button>
+	<button id="create" type="button" class="btn btn-primary" ng-click="createClicked()" ng-show="actionType == 'create'">Erstellen</button>
+	<button id="edit" type="button" class="btn btn-primary" ng-click="editClicked()" ng-show="actionType == 'edit'">&Auml;ndern</button>
+</div>

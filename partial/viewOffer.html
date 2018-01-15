@@ -1,0 +1,54 @@
+<div id="dialogform" class="viewDialog" ng-controller="viewOfferController">
+	<div class="pictureArea">
+		<div id="myCarousel" class="carousel slide" style="height: 100%">
+			<ol class="carousel-indicators"  ng-show="offerPictures.length > 1">
+			  <li data-target="#myCarousel" ng-repeat="img in offerPictures" data-slide-to="{{$index}}" ng-class="{active: $first}"></li>
+			</ol>
+			<div class="carousel-inner" style="height: 100%; width: 100%">
+			  <div  ng-repeat="img in offerPictures"  ng-class="{active: $first}" class="item" style="height: 100%; width: 100%">
+				<img src="{{img}}" class="carouselImage">
+			  </div>
+			</div>
+			<a class="left carousel-control" href="#myCarousel" data-slide="prev" target="_self" ng-show="offerPictures.length > 1">
+			  <span class="glyphicon glyphicon-chevron-left"></span>
+			</a>
+			<a class="right carousel-control" href="#myCarousel" data-slide="next" target="_self" ng-show="offerPictures.length > 1">
+			  <span class="glyphicon glyphicon-chevron-right"></span>
+			</a>
+	  </div>
+	</div>
+	<div class="contentArea">
+		<div style="height:370px;overflow-y: auto;">
+			<span style="font-size:large;"><strong>{{viewOffer.title}}</strong></span>
+			<div ng-bind-html="viewOffer.description|nl2br"></div>
+			<p style="margin-top:15px">
+				<i>Anbieter:</i><br />
+				<strong>{{viewOffer.providerDetails.name}}</strong><br />
+				{{viewOffer.provider}}<br /> 
+				{{viewOffer.providerDetails.phone}}
+			</p>
+			<p style="margin-top:15px">
+				<i>Ort:</i><br />
+				{{viewOffer.providerDetails.street}}<br />
+				{{viewOffer.providerDetails.place}}<br />				
+			</p>
+			<p style="margin-top:15px">
+				<i>&Ouml;ffnungszeiten:</i>
+				<div ng-bind-html="viewOffer.openinghours|nl2br" style="margin-top: -10px;"></div>
+			</p>
+			<p style="margin-top:15px">
+				<i>{{viewOffer.activityCount}} Aktivit&auml;t(en) mit {{viewOffer.participantCount}} Teilnehmer(n) geplant</i>
+			</p>
+		</div>
+		<div style="text-align:center; margin:-5px; padding: 0;">
+			<button id="abort" type="button" class="btn btn-primary" ng-click="backClicked()">Schliessen</button>
+			<button id="edit" type="button" class="btn btn-primary" ng-click="editClicked()" ng-show="viewOffer.provider == name">Bearbeiten</button>
+			<button id="delete" type="button" class="btn btn-primary btn-danger" ng-click="deleteClicked()" ng-show="viewOffer.provider == name">L&ouml;schen</button>
+			<button id="shAkt" type="button" class="btn btn-primary" ng-click="showActivitiesClicked()" ng-show="role==2 && viewOffer.provider != name">Akt. anzeigen</button>
+			<div class="btn-group" role="group" ng-show="role == 1">
+				<button id="shAkt2" type="button" class="btn btn-primary" ng-click="showActivitiesClicked()">Akt. anzeigen</button>
+				<button id="create" type="button" class="btn btn-primary btn-success" ng-click="createActivityClicked()">Akt. erstellen</button>
+			</div>
+		</div>
+	</div>
+</div>

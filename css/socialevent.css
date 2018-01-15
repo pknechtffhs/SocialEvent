@@ -1,0 +1,336 @@
+.vertical-center {
+  min-height: 100%;
+  min-height: calc(100vh - 80px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.widget {
+	margin: auto;
+	position: fixed;
+	top: 0; left: 0; bottom: 0; right: 0;
+	background-color: rgba(255,255,255,0.9);
+	border: 5px solid rgba(150, 165, 190, 0.425);
+	color: #475B80;
+	border-radius: 25px;
+	padding: 5px 20px;
+}
+.dimmer {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.8);
+}
+.messageDimmer{
+	z-index: 20;
+}
+.dialogDimmer{
+	z-index: 10;
+}
+.dialogWidget{
+	height: 450px;
+	width: 550px;
+	z-index: 15;
+}
+.infoWidget {
+	z-index: 25;
+	width: 500px;
+	height: 100px;
+}
+.errorWidget {
+	color: #9e3131;
+	border-color: rgba(237,107,107,0.8);
+	background-color: rgba(255,230,230,0.8);
+}
+.okWidget {
+	color: #689e31;
+	border-color: rgba(172,237,107,0.8);
+	background-color: rgba(243,255,230,0.8);
+}
+.infoWidget table .iconCell{
+	width: 75px;
+	padding: 0 25px 0 0px;
+}
+.infoWidget table .iconCell img {
+	width: 100%;
+}
+
+#bgholder:before {
+  content: "";
+  position: fixed;
+  top: -5%;
+  left: -5%;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  
+  display: block;
+  background-image: url('../img/bg.jpg');
+  background-size:cover;
+  width: 110%;
+  height: 110%;
+  
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
+
+#maincontent {
+	min-width:600px;
+	width:50%;
+	min-height:400px;
+	height:50%;
+	overflow: auto;
+	position: relative;
+	
+    background-color: rgba(150, 165, 190, 0.6);
+}
+#titlebar {
+	border-color:rgba(255,255,255,0.0);
+	border-radius: 0;
+	background-color: rgba(150, 165, 190,0.3);
+}
+#titlebar .navbar-form {
+	border-width: 0px;
+}
+#sidebar {
+	width: 200px;
+    left: 0px;
+    top: 75px;
+    position: absolute;
+    background-color: rgba(150, 165, 190,0.3);
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+.sidebar-button {
+	color: lightgray;
+	font-size: big;
+	padding: 10px;
+	border-bottom: lightgray solid 1px;
+	cursor: pointer;
+	-moz-user-select: none;
+    -ms-user-select: none;
+	user-select: none;
+	display: block;
+}
+.sidebar-button:first-of-type {
+	border-top-right-radius: 10px;
+}
+.sidebar-button:last-of-type {
+	border-bottom-right-radius: 10px;
+	border-bottom: 0;
+}
+.sidebar-button:hover {
+    background-color: rgba(150, 165, 190,0.3);
+	color: white;
+}
+.sidebar-button:visited {
+	color: white;
+}
+#registerTable td {
+	padding: 15px;
+	font-weight: bold;
+	margin-top: 30px;
+	width: 50%;
+	vertical-align:top;
+}
+#registerTable td h3 {
+	margin-top: 0;
+}
+#registerTable td:first-child {
+	border-right:2px solid #000000;;
+}
+#dialogform{
+	padding:0 25px;
+	text-align: center;
+}
+#dialogform table{
+	width: 100%;
+}
+#dialogform td{
+	text-align: left;
+	height: 40px;
+}
+#dialogform .btn-link{
+	padding-right:50px;
+	margin-top: 9px;
+}
+#dialogform .btn-primary {
+	width: 100px;
+	margin-top: 25px;
+	margin-bottom: 16px;
+	padding: 6px 0;
+}
+#dialogform .profilePicture {
+	width: 60px;
+	height: 60px;
+	border-radius:50%;
+	object-fit: cover;
+    margin-left: 10px;
+	margin-top: 10px;
+}
+.smallProfilePicture {
+	width: 45px;
+	height: 45px;
+	border-radius:50%;
+	object-fit: cover;
+	margin: 2px 5px;
+}
+#dialogform .companyPictureSmall {
+	width: 60px;
+	height: 60px;
+    margin-left: 10px;
+	margin-top: 10px;
+	object-fit: cover;
+}
+.small-hr {
+	margin: 5px;
+}
+#content {
+	margin-left: 200px;
+    min-height: calc(100vh - 80px);
+    width: calc(100vw - 280px);
+    border-radius: 10px;
+    background-color: rgba(150, 165, 190,0.5);
+	text-align: left;
+	padding:  0 25px 0 25px;
+	color: lightgray;
+}
+.navbar-right {
+    float: right!important;
+    margin-right: -15px;
+}
+.navbar-form {
+    width: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 0;
+    margin-left: 0;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.buttoned-image {
+    position: relative;
+    float:left;
+}
+.buttoned-image:hover img{
+    opacity:0.5;
+}
+.buttoned-image input {
+    position:absolute;
+    display:none;
+    top:20px;
+    left:20px;
+	width:40px;
+	size:40px;
+}
+.buttoned-image input:hover {
+	cursor: pointer;
+}
+.buttoned-image:hover input {
+    display: block;
+}
+.create-button{
+    position: absolute;
+    top: 90px;
+    right: 55px;
+}
+.content-table{
+	width: 100%;
+	border-collapse: separate;
+    border-spacing: 0 5px;
+}
+.content-table tr td{
+	background-color: rgba(15, 15, 10, 0.3);
+	padding: 10px;
+}
+.content-table tr:hover{
+	background-color: rgba(15, 15, 10, 0.5);
+}
+.content-table tr td:first-child {
+	border-radius: 15px 0 0 15px;
+}
+.content-table tr td:last-child {
+	border-radius: 0 15px 15px 0;
+}
+.content-table tr td{
+	background-color: rgba(15, 15, 10, 0.3);
+	padding: 10px;
+}
+.content-table .button-td{
+	padding: 0;
+	width: 1px;
+}
+.content-table .button-td input{
+	width: 25px;
+    height: 25px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+	margin: 5px 5px 0 0;
+}
+.content-table .button-td input:hover{
+    background-color: rgba(255, 255, 255, 0.7);
+	cursor: pointer;
+}
+
+#modifyTable td {
+	padding: 2px 5px;
+	vertical-align: top;
+}
+
+.viewDialog{
+	margin: -20px;
+	padding: 0 !important;
+	height: 455px;
+}
+.pictureArea {
+	float: left;
+    width: 40%;
+    height: calc( 100% - 15px);
+    margin-top: 15px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    overflow: hidden;
+}
+.embeddedWidget .pictureArea {
+	height: 100%;
+    margin-top: 0;
+}
+.pictureArea .carouselImage {
+	height: 100% !important;
+    width: 100%;
+	object-fit: cover;
+}
+.contentArea {
+	float: left;
+	padding: 5px 10px;
+    width: 60%;
+	text-align: left;
+}
+#dialogform .contentArea {
+	padding-top: 25px;
+}
+	
+.embeddedWidget {
+    width: 450px;
+    height: 350px;
+    background-color: blue;
+    margin: 0 10px 20px 10px;
+    display: inline-block;
+	background-color: rgba(255,255,255,0.85);
+	border: 5px solid rgba(150, 165, 190, 0.425);
+	border-radius: 25px;
+	overflow:hidden;
+	color: #475B80;
+}
+.bootstrap-datetimepicker-widget td {
+	text-align: center !important;
+	height: initial !important;
+}

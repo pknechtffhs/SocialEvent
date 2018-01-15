@@ -1,0 +1,69 @@
+<div id="dialogform" class="viewDialog" ng-controller="viewActivityController">
+	<div class="pictureArea">
+		<div id="myCarousel" class="carousel slide" style="height: 100%">
+			<ol class="carousel-indicators"  ng-show="activityPictures.length > 1">
+			  <li data-target="#myCarousel" ng-repeat="img in activityPictures" data-slide-to="{{$index}}" ng-class="{active: $first}"></li>
+			</ol>
+			<div class="carousel-inner" style="height: 100%; width: 100%">
+			  <div  ng-repeat="img in activityPictures"  ng-class="{active: $first}" class="item" style="height: 100%; width: 100%">
+				<img src="{{img}}" class="carouselImage">
+			  </div>
+			</div>
+			<a class="left carousel-control" href="#myCarousel" data-slide="prev" target="_self" ng-show="activityPictures.length > 1">
+			  <span class="glyphicon glyphicon-chevron-left"></span>
+			</a>
+			<a class="right carousel-control" href="#myCarousel" data-slide="next" target="_self" ng-show="activityPictures.length > 1">
+			  <span class="glyphicon glyphicon-chevron-right"></span>
+			</a>
+	  </div>
+	</div>
+	<div class="contentArea">
+		<div style="height:370px;overflow-y: auto;">
+			<span style="font-size:large;"><strong>{{viewActivity.title}}</strong></span>
+			<div ng-bind-html="viewActivity.description|nl2br"></div>
+			<p style="margin-top:15px; margin-bottom: 0px" ng-show="viewActivity.eventid">
+				<i>Verkn&uuml;ter Event:</i><br>
+				<strong>{{viewActivity.event.title}} ({{viewActivity.event.start}})</strong><br>
+				Veranstalter: {{viewActivity.event.name}} ({{viewActivity.event.place}})
+			</p> 
+			<p style="margin-top:15px; margin-bottom: 0px" ng-show="viewActivity.offerid">
+				<i>Verkn&uuml;tes Dauerangebot:</i><br>
+				<strong>{{viewActivity.offer.title}} ({{viewActivity.offer.name}})</strong><br>
+				Anbieter: {{viewActivity.offer.name}} ({{viewActivity.offer.place}})
+			</p> 
+			<p style="margin-top:15px; margin-bottom: 0px">
+				<i>Organisator:</i>
+				<table>
+					<tr>
+						<td rowspan="2"><img ng-src="{{viewActivity.profilepicture}}" class="smallProfilePicture"></td>
+						<td style="height: 20px"><strong>{{viewActivity.forename}} {{viewActivity.name}}</strong>
+					</tr>
+					<tr>
+						<td style="height: 20px"><a href="mailto:{{viewActivity.provider}}">{{viewActivity.provider}}</a></td>
+					</tr>
+				</table>		
+			</p>
+			<p style="margin-top:15px; margin-bottom: 0px" ng-show="viewActivity.eventid||viewActivity.offerid">
+				<i>Treffpunkt &amp; Start der Aktivit&auml;t:</i><br>
+				<strong>{{viewActivity.venue}} ({{viewActivity.start}})</strong>
+			</p> 
+			<p style="margin-top:15px; margin-bottom: 0px" ng-hide="viewActivity.eventid||viewActivity.offerid">
+				<i>Treffpunkt/Adresse &amp; Start der Aktivit&auml;t:</i><br>
+				<strong>{{viewActivity.street}}, {{viewActivity.place}}<br>{{viewActivity.start}}</strong>
+			</p>
+			<p style="margin-top:15px; margin-bottom: 0px">
+				<i>Teilnehmer:</i>
+				<div style="float:left"><img ng-src="{{viewActivity.profilepicture}}" class="smallProfilePicture" ng-attr-title="{{viewActivity.forename}}"></div>
+				<div style="float:left" ng-repeat="participant in viewActivity.participants"><img ng-src="{{participant.profilepicture}}" class="smallProfilePicture" ng-attr-title="{{participant.forename}}"></div>
+			</p>
+		</div>
+		<div style="text-align:center; margin:-5px; padding: 0;">
+			<button id="abort" type="button" class="btn btn-primary" ng-click="backClicked()">Schliessen</button>
+			<button id="edit" type="button" class="btn btn-primary" ng-click="editClicked()" ng-show="viewActivity.provider == name">Bearbeiten</button>
+			<button id="vO" type="button" class="btn btn-primary" ng-click="viewOfferClicked()" ng-show="viewActivity.offerid">Verkn. Angebot</button>
+			<button id="vE" type="button" class="btn btn-primary" ng-click="viewEventClicked()" ng-show="viewActivity.eventid">Verkn. Event </button>
+			<button id="join" type="button" class="btn btn-primary btn-success" ng-click="joinActivityClicked()" ng-show="viewActivity.provider != name && role == 1 && !viewActivity.participated">Teilnehmen</button>
+			<button id="leave" type="button" class="btn btn-primary btn-danger" ng-click="leaveActivityClicked()" ng-show="viewActivity.provider != name && role == 1 && viewActivity.participated">Abmelden</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,10 @@
+<div id="dialogform" ng-controller="deleteActivityController">
+	<h4>Aktivit&auml;t entfernen</h4>
+	<div style="width:100%; text-align: center; margin-top:30%">
+		<p><strong>Wollen Sie Ihre Aktivit&auml;t {{deleteActivity.title}} wirklich l&ouml;schen?</strong> <br> Dabei werden auch alle verbundenen Teilnahmen entfernt. </p>
+	</div>
+	<div style="margin-top: 5%">
+		<button id="no" type="button" class="btn btn-primary" ng-click="noClicked()">Nein</button>
+		<button id="yes" type="button" class="btn btn-primary btn-danger" ng-click="yesClicked()">Ja</button>
+	</div>
+</div>

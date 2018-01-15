@@ -1,0 +1,10 @@
+<div id="dialogform" ng-controller="deleteOfferController">
+	<h4>Dauerangebot entfernen</h4>
+	<div style="width:100%; text-align: center; margin-top:30%">
+		<p><strong>Wollen Sie Ihr Dauerangebot {{deleteOffer.title}} wirklich l&ouml;schen?</strong> <br> Dabei werden auch alle verbundenen Aktivitäten und Teilnahmen entfernt. </p>
+	</div>
+	<div style="margin-top: 5%">
+		<button id="no" type="button" class="btn btn-primary" ng-click="noClicked()">Nein</button>
+		<button id="yes" type="button" class="btn btn-primary btn-danger" ng-click="yesClicked()">Ja</button>
+	</div>
+</div>

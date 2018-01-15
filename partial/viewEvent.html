@@ -1,0 +1,54 @@
+<div id="dialogform" class="viewDialog" ng-controller="viewEventController">
+	<div class="pictureArea">
+		<div id="myCarousel" class="carousel slide" style="height: 100%">
+			<ol class="carousel-indicators" ng-show="eventPictures.length > 1">
+			  <li data-target="#myCarousel" ng-repeat="img in eventPictures" data-slide-to="{{$index}}" ng-class="{active: $first}"></li>
+			</ol>
+			<div class="carousel-inner" style="height: 100%; width: 100%">
+			  <div  ng-repeat="img in eventPictures"  ng-class="{active: $first}" class="item" style="height: 100%; width: 100%">
+				<img src="{{img}}" class="carouselImage">
+			  </div>
+			</div>
+			<a class="left carousel-control" href="#myCarousel" data-slide="prev" target="_self" ng-show="eventPictures.length > 1">
+			  <span class="glyphicon glyphicon-chevron-left"></span>
+			</a>
+			<a class="right carousel-control" href="#myCarousel" data-slide="next" target="_self" ng-show="eventPictures.length > 1">
+			  <span class="glyphicon glyphicon-chevron-right"></span>
+			</a>
+	  </div>
+	</div>
+	<div class="contentArea">
+		<div style="height:370px;overflow-y: auto;">
+			<span style="font-size:large;"><strong>{{viewEvent.title}}</strong></span>
+			<div ng-bind-html="viewEvent.description|nl2br"></div>
+			<p style="margin-top:15px">
+				<i>Anbieter:</i><br />
+				<strong>{{viewEvent.providerDetails.name}}</strong><br />
+				{{viewEvent.provider}}<br /> 
+				{{viewEvent.providerDetails.phone}}
+			</p>
+			<p style="margin-top:15px">
+				<i>Ort:</i><br />
+				{{viewEvent.providerDetails.street}}<br />
+				{{viewEvent.providerDetails.place}}<br />				
+			</p>
+			<p style="margin-top:15px">
+				<i>Datum &amp; Uhrzeit:</i><br />
+				<strong>{{viewEvent.start}} - {{viewEvent.end}}</strong>
+			</p>
+			<p style="margin-top:15px">
+				<i>{{viewEvent.activityCount}} Aktivit&auml;t(en) mit {{viewEvent.participantCount}} Teilnehmer(n) geplant</i>
+			</p>
+		</div>
+		<div style="text-align:center; margin:-5px; padding: 0;">
+			<button id="abort" type="button" class="btn btn-primary" ng-click="backClicked()">Schliessen</button>
+			<button id="edit" type="button" class="btn btn-primary" ng-click="editClicked()" ng-show="viewEvent.provider == name">Bearbeiten</button>
+			<button id="delete" type="button" class="btn btn-primary btn-danger" ng-click="deleteClicked()" ng-show="viewEvent.provider == name">L&ouml;schen</button>
+			<button id="shAkt" type="button" class="btn btn-primary" ng-click="showActivitiesClicked()" ng-show="role==2 && viewEvent.provider != name">Akt. anzeigen</button>
+			<div class="btn-group" role="group" ng-show="role == 1">
+				<button id="shAkt" type="button" class="btn btn-primary" ng-click="showActivitiesClicked()">Akt. anzeigen</button>
+				<button id="create" type="button" class="btn btn-primary btn-success" ng-click="createActivityClicked()">Akt. erstellen</button>
+			</div>
+		</div>
+	</div>
+</div>

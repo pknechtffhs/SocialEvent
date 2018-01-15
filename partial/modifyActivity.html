@@ -1,0 +1,65 @@
+<div id="dialogform" ng-controller="modifyActivityController">
+	<h4 ng-show="actionType == 'create'"><span ng-show="modifyActivity.offerid || modifyActivity.eventid">Verkn&uuml;pfte </span>Aktivit&auml;t erstellen</h4>
+	<h4 ng-show="actionType == 'edit'"><span ng-show="modifyActivity.offerid || modifyActivity.eventid">Verkn&uuml;pfte </span>Aktivit&auml;t &auml;ndern</h4>
+	<table id="modifyTable">
+		<tr>
+			<td><label for="title">Titel</label></td>
+			<td><input type="text" class="form-control" id="title" placeholder="Titel eingeben..." ng-model="modifyActivity.title" ng-change="changed=true"></td>
+		</tr>
+		<tr ng-show="modifyActivity.offerid">
+			<td><label for="lc">Angebot</label></td>
+			<td><input type="text" class="form-control" id="lc" ng-model="linkedContent" ng-change="changed=true" disabled></td>
+		</tr>
+		<tr ng-show="modifyActivity.eventid">
+			<td><label for="lc2">Event</label></td>
+			<td><input type="text" class="form-control" id="lc2" ng-model="linkedContent" ng-change="changed=true" disabled></td>
+		</tr>
+		<tr>
+			<td><label for="description">Beschreibung</label></td>
+			<td><textarea rows="2" id="description" cols="45" placeholder="Beschreibung eingeben..." class="form-control" style="resize: none;" ng-model="modifyActivity.description" ng-change="changed=true"></textarea></td>
+		</tr>
+		<tr>
+			<td><label for="start">Zeitpunkt</label></td>
+			<td>
+			    <div class='input-group date' id='datepicker_start'>
+					<input type="text" class="form-control" id="start" placeholder="Zeitpunkt auswählen..." ng-model="modifyActivity.start_real" ng-change="changed=true" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</td>
+		</tr>
+		<tr ng-show="modifyActivity.offerid || modifyActivity.eventid">
+			<td><label for="venue">Treffpunkt</label></td>
+			<td><input type="text" class="form-control" id="venue" placeholder="Treffpunkt eingeben..." ng-model="modifyActivity.venue" ng-change="changed=true"></td>
+		</tr>
+		<tr ng-hide="modifyActivity.offerid || modifyActivity.eventid">
+			<td><label for="street">Strasse</label></td>
+			<td><input type="text" class="form-control" id="street" placeholder="Strasse eingeben..." ng-model="modifyActivity.street" ng-change="changed=true"></td>
+		</tr>
+		<tr ng-hide="modifyActivity.offerid || modifyActivity.eventid">
+			<td><label for="place">PLZ/Ort</label></td>
+			<td><input type="text" class="form-control" id="place" placeholder="PLZ/Ort eingeben..." ng-model="modifyActivity.place" ng-change="changed=true"></td>
+		</tr>		
+	</table>
+	<hr style="margin: 15px;">
+	<table>
+		<tr>
+			<td style="height: 70px;">
+				<label class="btn btn-default btn-file">Hinzuf&uuml;gen<input type="file" style="display: none;" id="file" name="file" custom-on-change="onPictureUpdate"></label>
+			</td>
+			<td ng-repeat="img in activityPictures" ng-show="activityPictures.length">
+				<div class="buttoned-image"> 
+					<img ng-src="{{img}}" class="companyPictureSmall">
+					<input type="image" src="img/del.png" ng-click="deleteClicked(img)"/>
+				</div>
+			</td>
+			<td ng-hide="activityPictures.length">
+				Keine Bilder vorhanden!
+			</td>
+		</tr>
+	</table>
+	<button id="abort" type="button" class="btn btn-primary" ng-click="abortClicked()">Abbrechen</button>
+	<button id="create" type="button" class="btn btn-primary" ng-click="createClicked()" ng-show="actionType == 'create'">Erstellen</button>
+	<button id="edit" type="button" class="btn btn-primary" ng-click="editClicked()" ng-show="actionType == 'edit'">&Auml;ndern</button>
+</div>

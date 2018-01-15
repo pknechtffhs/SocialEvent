@@ -1,0 +1,15 @@
+<h2>Login</h2>
+<div id="dialogform" ng-controller="loginController">
+	<p>Melden Sie sich nachfolgend mit Ihren Anmeldedaten an:</p>
+	<div class="form-group">
+		<label for="username">Benutzername/E-Mail</label>
+		<input type="text" class="form-control" id="username" placeholder="Benutzername eingeben..." ng-model="logindata.username">
+	</div>
+	<div class="form-group">
+		<label for="password">Passwort</label>
+		<input type="password" class="form-control" id="password" placeholder="Passwort eingeben..." ng-model="logindata.password">
+	</div>
+	<button id="abort" type="button" class="btn btn-primary" ng-click="abortClicked()">Abbrechen</button>
+	<button id="login" type="submit" class="btn btn-primary" ng-click="loginClicked()">Login</button>
+	<p><i>Passwort vergessen?<br />Wende dich an den Support von SocialEvent.tk!</i></p>
+</div>
